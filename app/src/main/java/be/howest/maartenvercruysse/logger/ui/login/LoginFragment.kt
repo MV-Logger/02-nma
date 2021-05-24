@@ -15,6 +15,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.navigation.findNavController
 import be.howest.maartenvercruysse.logger.databinding.FragmentLoginBinding
 
 import be.howest.maartenvercruysse.logger.R
@@ -35,6 +36,11 @@ class LoginFragment : Fragment() {
     ): View? {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
+
+        binding.toRegister.setOnClickListener{ view : View ->
+            view.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        }
+
         return binding.root
 
     }
