@@ -20,7 +20,8 @@
     <string name="welcome">"Welcome!"</string>
     <string name="invalid_username">Username is already in use</string>
     <string name="invalid_password">Password must be at least 5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="invalid_password_login">Password is incorrect!</string>
+    <string name="login_failed">Login failed</string>
     <string name="back">Go back to login page</string>
     <string name="toRegister">If you don\'t have an account yet, sign up here</string>
 </resources>
