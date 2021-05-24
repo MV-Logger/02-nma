@@ -22,17 +22,17 @@ interface LoggerService {
 object LoggerNetwork {
 
 
-//    val client = OkHttpClient.Builder()
-//        .connectTimeout(30, TimeUnit.SECONDS)
-//        .readTimeout(30, TimeUnit.SECONDS)
-//        .writeTimeout(30, TimeUnit.SECONDS)
-//        .build()
+    private val client: OkHttpClient = OkHttpClient.Builder() // increase timeout from 10s (default) to 30s
+        .connectTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .build()
 
     // Configure retrofit to parse JSON and use coroutines
     private val retrofit = Retrofit.Builder()
         .baseUrl("https://nodejs-03.herokuapp.com/api/")
         .addConverterFactory(MoshiConverterFactory.create())
-//        .client(client)
+        .client(client)
         .build()
 
     val Logger = retrofit.create(LoggerService::class.java)

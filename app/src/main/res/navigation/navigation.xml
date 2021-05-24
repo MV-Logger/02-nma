@@ -40,7 +40,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="be.howest.maartenvercruysse.logger.ui.login.RegisterFragment"
+        android:name="be.howest.maartenvercruysse.logger.ui.register.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
