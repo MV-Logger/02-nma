@@ -41,6 +41,10 @@ class RegisterFragment : Fragment() {
             view.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
+        binding.register.setOnClickListener{ view : View ->
+            view.findNavController().navigate(R.id.action_registerFragment_to_nav_home)
+        }
+
         return binding.root
 
     }
@@ -52,7 +56,7 @@ class RegisterFragment : Fragment() {
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
-        val loginButton = binding.login
+        val loginButton = binding.register
         val loadingProgressBar = binding.loading
 
         loginViewModel.loginFormState.observe(viewLifecycleOwner,

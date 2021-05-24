@@ -1,5 +1,6 @@
 package be.howest.maartenvercruysse.logger.ui.login
 
+import android.content.Intent
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.annotation.StringRes
@@ -16,6 +17,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.navigation.findNavController
+import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.databinding.FragmentLoginBinding
 
 import be.howest.maartenvercruysse.logger.R
@@ -37,7 +39,7 @@ class LoginFragment : Fragment() {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
-        binding.toRegister.setOnClickListener{ view : View ->
+        binding.toRegister.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
 
@@ -78,6 +80,8 @@ class LoginFragment : Fragment() {
                 }
                 loginResult.success?.let {
                     updateUiWithUser(it)
+                    val intent = Intent(this.context, MainActivity::class.java)
+                    startActivity(intent)
                 }
             })
 
@@ -105,6 +109,7 @@ class LoginFragment : Fragment() {
                     usernameEditText.text.toString(),
                     passwordEditText.text.toString()
                 )
+
             }
             false
         }
