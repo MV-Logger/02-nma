@@ -13,4 +13,11 @@ class StartActivity : AppCompatActivity() {
     fun moveToMain(){
         startActivity(Intent(this, MainActivity::class.java))
     }
+
+    init{
+        checkAuth
+    }
+
+
+
 }
