@@ -7,12 +7,8 @@ import be.howest.maartenvercruysse.logger.network.ApiClient
 import be.howest.maartenvercruysse.logger.network.SessionManager
 
 class StartActivity : AppCompatActivity() {
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_start)
-
-
     }
 }

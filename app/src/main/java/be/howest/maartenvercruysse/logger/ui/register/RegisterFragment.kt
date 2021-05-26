@@ -1,33 +1,24 @@
 package be.howest.maartenvercruysse.logger.ui.register
 
 import android.content.Intent
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
-import androidx.lifecycle.viewModelScope
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import be.howest.maartenvercruysse.logger.MainActivity
-import be.howest.maartenvercruysse.logger.databinding.FragmentRegisterBinding
-
 import be.howest.maartenvercruysse.logger.R
-import be.howest.maartenvercruysse.logger.network.LoggerNetwork
-import be.howest.maartenvercruysse.logger.network.Token
+import be.howest.maartenvercruysse.logger.databinding.FragmentRegisterBinding
 import be.howest.maartenvercruysse.logger.network.UserData
-import be.howest.maartenvercruysse.logger.ui.login.LoggedInUserView
-import be.howest.maartenvercruysse.logger.ui.login.LoginResult
-import be.howest.maartenvercruysse.logger.ui.login.LoginViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.*
-import kotlinx.coroutines.launch
 
 class RegisterFragment : Fragment() {
 
@@ -50,15 +41,12 @@ class RegisterFragment : Fragment() {
             view.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         registerViewModel = ViewModelProvider(this, RegisterViewModelFactory(requireActivity().application))
             .get(RegisterViewModel::class.java)
-
-        registerViewModel.repo.checkAuth()
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
