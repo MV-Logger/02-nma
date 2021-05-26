@@ -13,16 +13,35 @@ import be.howest.maartenvercruysse.logger.ui.register.RegisterResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
-private const val TOKEN = "TOKEN"
-
 class LoggerRepository private constructor(context: Context) {
     private val appContext = context.applicationContext
     private var loggerService: LoggerService = ApiClient().getLoggerService(context)
     private var sessionManager: SessionManager = SessionManager(context)
 
-    fun checkAuth() {
-        appContext.startActivity(Intent(appContext, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    suspend fun checkAuth() {
+        Log.d("test-auth", "b if")
+        if (sessionManager.fetchAuthToken() != null) {
+            withContext(Dispatchers.IO) {
+                try {
+                    val response = loggerService.authenticated()
+                    Log.d("test-auth", "after resp")
+                    if (response.isSuccessful) {
+                        Log.d("test-auth", "succ resp")
+                        appContext.startActivity(Intent(appContext, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    }else{
+                        Log.d("test-auth", "failed resp")
+                        Log.d("test-auth", response.toString())
+                        Log.d("test-auth", response.code().toString())
+                        Log.d("test-auth", response.body().toString())
+                    }
+                    Unit
+                } catch (e: Throwable) {
+                    Log.d("test-auth", "failed")
+                    Log.d("test-auth", e.stackTraceToString())
+                }
+            }
+        }
+
     }
 
     companion object {
@@ -49,8 +68,8 @@ class LoggerRepository private constructor(context: Context) {
                 val response = loggerService.loginUser(user)
 
                 if (response.isSuccessful) {
-                    val token: Token? = response.body()
-                    sessionManager.saveAuthToken(token.toString())
+                    val token: Token = response.body()!!
+                    sessionManager.saveAuthToken(token.access_token)
                     loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = user.username)))
                 } else {
                     loginResult.postValue(LoginResult(error = R.string.login_failed))

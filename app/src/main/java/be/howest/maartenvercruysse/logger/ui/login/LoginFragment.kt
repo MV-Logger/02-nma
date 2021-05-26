@@ -16,11 +16,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.databinding.FragmentLoginBinding
 
 import be.howest.maartenvercruysse.logger.R
+import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -42,6 +44,7 @@ class LoginFragment : Fragment() {
         binding.toRegister.setOnClickListener { view: View ->
             view.findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
+
 
         return binding.root
 
@@ -120,6 +123,19 @@ class LoginFragment : Fragment() {
                 usernameEditText.text.toString(),
                 passwordEditText.text.toString()
             )
+        }
+
+        loginViewModel.startupFlag.observe(viewLifecycleOwner, //checks auth token on startup
+            {flag ->
+                if (flag == false){
+                    lifecycleScope.launch{
+                        loginViewModel.repo.checkAuth()
+                    }
+                }
+            })
+
+        if (loginViewModel.startupFlag.value == true) {
+            loginViewModel.startupFlag.value = false
         }
     }
 

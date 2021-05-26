@@ -9,13 +9,15 @@ import be.howest.maartenvercruysse.logger.network.UserData
 import be.howest.maartenvercruysse.logger.repository.LoggerRepository
 import kotlinx.coroutines.launch
 
-class LoginViewModel(private val repo: LoggerRepository) : ViewModel() {
+class LoginViewModel(val repo: LoggerRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm
 
     private val _loginResult = MutableLiveData<LoginResult>()
     val loginResult: LiveData<LoginResult> = _loginResult
+
+    val startupFlag = MutableLiveData(true) // need to fire function only once on startup but need access to repo
 
     fun login(username: String, password: String) {
         viewModelScope.launch { repo.login(_loginResult, UserData(username, password)) }
