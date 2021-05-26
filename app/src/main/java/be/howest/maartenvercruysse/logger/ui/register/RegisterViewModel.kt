@@ -16,7 +16,7 @@ import be.howest.maartenvercruysse.logger.ui.login.LoginFormState
 import be.howest.maartenvercruysse.logger.ui.login.LoginResult
 import kotlinx.coroutines.launch
 
-class RegisterViewModel(private val repo: LoggerRepository) : ViewModel() {
+class RegisterViewModel(val repo: LoggerRepository) : ViewModel() {
 
     private val _loginForm = MutableLiveData<LoginFormState>()
     val loginFormState: LiveData<LoginFormState> = _loginForm

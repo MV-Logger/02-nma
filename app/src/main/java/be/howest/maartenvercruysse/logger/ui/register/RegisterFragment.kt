@@ -42,22 +42,23 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.toLogin.setOnClickListener{ view : View ->
             view.findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
-
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        registerViewModel = ViewModelProvider(this, RegisterViewModelFactory())
+        registerViewModel = ViewModelProvider(this, RegisterViewModelFactory(requireActivity().application))
             .get(RegisterViewModel::class.java)
+
+        registerViewModel.repo.checkAuth()
 
         val usernameEditText = binding.username
         val passwordEditText = binding.password
