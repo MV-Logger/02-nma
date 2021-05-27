@@ -2,6 +2,7 @@ package be.howest.maartenvercruysse.logger
 
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -12,11 +13,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import be.howest.maartenvercruysse.logger.databinding.ActivityMainBinding
+import be.howest.maartenvercruysse.logger.repository.LoggerRepository
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var repo: LoggerRepository
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +46,23 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        repo = LoggerRepository.getInstance(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_logout -> {
+                repo.logout()
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

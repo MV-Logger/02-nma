@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.R
+import be.howest.maartenvercruysse.logger.StartActivity
 import be.howest.maartenvercruysse.logger.network.*
 import be.howest.maartenvercruysse.logger.ui.login.LoggedInUserView
 import be.howest.maartenvercruysse.logger.ui.login.LoginResult
@@ -19,24 +20,15 @@ class LoggerRepository private constructor(context: Context) {
     private var sessionManager: SessionManager = SessionManager(context)
 
     suspend fun checkAuth() {
-        Log.d("test-auth", "b if")
         if (sessionManager.fetchAuthToken() != null) {
             withContext(Dispatchers.IO) {
                 try {
                     val response = loggerService.authenticated()
-                    Log.d("test-auth", "after resp")
                     if (response.isSuccessful) {
-                        Log.d("test-auth", "succ resp")
                         appContext.startActivity(Intent(appContext, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                    }else{
-                        Log.d("test-auth", "failed resp")
-                        Log.d("test-auth", response.toString())
-                        Log.d("test-auth", response.code().toString())
-                        Log.d("test-auth", response.body().toString())
                     }
                     Unit
                 } catch (e: Throwable) {
-                    Log.d("test-auth", "failed")
                     Log.d("test-auth", e.stackTraceToString())
                 }
             }
@@ -64,7 +56,6 @@ class LoggerRepository private constructor(context: Context) {
     suspend fun login(loginResult: MutableLiveData<LoginResult>, user: UserData) {
         withContext(Dispatchers.IO) {
             try {
-                Log.d("test-token", "try")
                 val response = loggerService.loginUser(user)
 
                 if (response.isSuccessful) {
@@ -97,5 +88,10 @@ class LoggerRepository private constructor(context: Context) {
             }
 
         }
+    }
+
+    fun logout(){
+        sessionManager.removeAuthToken()
+        appContext.startActivity(Intent(appContext, StartActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 }
