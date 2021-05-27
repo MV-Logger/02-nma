@@ -12,14 +12,17 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import be.howest.maartenvercruysse.logger.databinding.ActivityMainBinding
 import be.howest.maartenvercruysse.logger.repository.LoggerRepository
+import be.howest.maartenvercruysse.logger.ui.MainViewModel
+import be.howest.maartenvercruysse.logger.ui.MainViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var repo: LoggerRepository
+    private lateinit var viewModel: MainViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,12 +44,13 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-        repo = LoggerRepository.getInstance(this)
+        viewModel = ViewModelProvider(this, MainViewModelFactory(this.application))
+            .get(MainViewModel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -58,7 +62,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_logout -> {
-                repo.logout()
+                viewModel.repo.logout()
                 true
             }
             else -> false

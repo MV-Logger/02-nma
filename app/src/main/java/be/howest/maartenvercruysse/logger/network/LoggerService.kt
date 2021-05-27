@@ -14,4 +14,7 @@ interface LoggerService {
 
     @GET("auth/authenticated")
     suspend fun authenticated(): Response<Void>
+
+    @GET("books")
+    suspend fun getBooks(): List<Book>
 }

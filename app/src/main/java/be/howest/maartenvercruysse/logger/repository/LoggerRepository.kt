@@ -3,10 +3,15 @@ package be.howest.maartenvercruysse.logger.repository
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.R
 import be.howest.maartenvercruysse.logger.StartActivity
+import be.howest.maartenvercruysse.logger.database.DatabaseBook
+import be.howest.maartenvercruysse.logger.database.LoggerDatabase
+import be.howest.maartenvercruysse.logger.database.asDatabaseModel
+import be.howest.maartenvercruysse.logger.database.getDatabase
 import be.howest.maartenvercruysse.logger.network.*
 import be.howest.maartenvercruysse.logger.ui.login.LoggedInUserView
 import be.howest.maartenvercruysse.logger.ui.login.LoginResult
@@ -18,6 +23,9 @@ class LoggerRepository private constructor(context: Context) {
     private val appContext = context.applicationContext
     private var loggerService: LoggerService = ApiClient().getLoggerService(context)
     private var sessionManager: SessionManager = SessionManager(context)
+    private val database = getDatabase(context)
+
+    val books: LiveData<List<DatabaseBook>> = database.loggerDao.getBooks()
 
     suspend fun checkAuth() {
         if (sessionManager.fetchAuthToken() != null) {
@@ -93,5 +101,12 @@ class LoggerRepository private constructor(context: Context) {
     fun logout(){
         sessionManager.removeAuthToken()
         appContext.startActivity(Intent(appContext, StartActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
+
+    suspend fun refreshBooks(){
+        withContext(Dispatchers.IO) {
+            Log.d( "book","refresh books is called");
+            database.loggerDao.insertAll(loggerService.getBooks().asDatabaseModel())
+        }
     }
 }
