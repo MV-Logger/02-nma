@@ -8,12 +8,13 @@ import kotlinx.coroutines.launch
 class MainViewModel(val repo: LoggerRepository) : ViewModel() {
 
     init {
-        refreshBooks()
+        refreshRepo()
     }
 
-    private fun refreshBooks() {
+    private fun refreshRepo() {
         viewModelScope.launch {
             repo.refreshBooks()
+            repo.refreshEntries()
         }
     }
 

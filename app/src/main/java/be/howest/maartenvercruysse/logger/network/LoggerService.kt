@@ -4,6 +4,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface LoggerService {
     @POST("auth/register")
@@ -20,4 +21,7 @@ interface LoggerService {
 
     @POST("books")
     suspend fun addBook(@Body book: Book): Response<Void>
+
+    @GET("books/{id}/entries")
+    suspend fun getEntries(@Path("id") id: Int): List<Entry>
 }

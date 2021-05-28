@@ -11,10 +11,17 @@ interface LoggerDao {
     fun getBooks(): LiveData<List<DatabaseBook>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(videos: List<DatabaseBook>)
+    fun insertAllBooks(books: List<DatabaseBook>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAllEntries(entries: List<DatabaseEntry>)
+
+    @Query("Select *  from DatabaseEntry where book_id = :id")
+    fun getEntriesFromBook(id: Int): LiveData<List<DatabaseEntry>>
 }
 
-@Database(entities = [DatabaseBook::class], version = 1)
+
+@Database(entities = [DatabaseBook::class, DatabaseEntry::class  ], version = 3)
 abstract class LoggerDatabase : RoomDatabase() {
     abstract val loggerDao: LoggerDao
 }
@@ -27,7 +34,9 @@ fun getDatabase(context: Context): LoggerDatabase {
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
                 LoggerDatabase::class.java,
-                "Logger").build()
+                "Logger")
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
     return INSTANCE

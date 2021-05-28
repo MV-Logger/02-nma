@@ -105,7 +105,16 @@ class LoggerRepository private constructor(context: Context) {
     suspend fun refreshBooks(){
         withContext(Dispatchers.IO) {
             Log.d( "book","refresh books is called");
-            database.loggerDao.insertAll(loggerService.getBooks().asDatabaseModel())
+            database.loggerDao.insertAllBooks(loggerService.getBooks().asDatabaseModel())
+        }
+    }
+
+    suspend fun refreshEntries(){
+        withContext(Dispatchers.IO){
+            books.value?.forEach {
+                database.loggerDao.insertAllEntries(loggerService.getEntries(it.id).asDatabaseModel())
+            }
+            Log.d("book", "refreshed entries")
         }
     }
 
@@ -122,3 +131,5 @@ class LoggerRepository private constructor(context: Context) {
         }
     }
 }
+
+
