@@ -9,6 +9,7 @@ import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.R
 import be.howest.maartenvercruysse.logger.StartActivity
 import be.howest.maartenvercruysse.logger.database.DatabaseBook
+import be.howest.maartenvercruysse.logger.database.DatabaseEntry
 import be.howest.maartenvercruysse.logger.database.asDatabaseModel
 import be.howest.maartenvercruysse.logger.database.getDatabase
 import be.howest.maartenvercruysse.logger.network.*
@@ -129,6 +130,10 @@ class LoggerRepository private constructor(context: Context) {
                Log.d("book", e.stackTraceToString())
            }
         }
+    }
+
+    fun getEntriesFromBook(id: Int ): LiveData<List<DatabaseEntry>> {
+        return database.loggerDao.getEntriesFromBook(id)
     }
 }
 

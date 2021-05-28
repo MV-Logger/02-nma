@@ -16,17 +16,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="be.howest.maartenvercruysse.logger.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="be.howest.maartenvercruysse.logger.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
-    <fragment
         android:id="@+id/loginFragment"
         android:name="be.howest.maartenvercruysse.logger.ui.login.LoginFragment"
         android:label="fragment_login"
@@ -50,9 +39,4 @@
             android:id="@+id/action_registerFragment_to_nav_home"
             app:destination="@id/nav_home" />
     </fragment>
-    <activity
-        android:id="@+id/mainActivity"
-        android:name="be.howest.maartenvercruysse.logger.MainActivity"
-        android:label="app_bar_main"
-        tools:layout="@layout/app_bar_main" />
 </navigation>
