@@ -6,7 +6,9 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -15,8 +17,13 @@ import androidx.navigation.ui.setupWithNavController
 import be.howest.maartenvercruysse.logger.databinding.ActivityMainBinding
 import be.howest.maartenvercruysse.logger.ui.MainViewModel
 import be.howest.maartenvercruysse.logger.ui.MainViewModelFactory
+import be.howest.maartenvercruysse.logger.ui.books.BookFragment
+import be.howest.maartenvercruysse.logger.ui.books.BookFragmentDirections
 import be.howest.maartenvercruysse.logger.ui.dialog.BookDialogFragment
+import be.howest.maartenvercruysse.logger.ui.home.HomeFragment
+import be.howest.maartenvercruysse.logger.ui.home.HomeFragmentDirections
 import com.google.android.material.navigation.NavigationView
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,9 +70,28 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        // This logic, controls which fragment will be opened when an item is clicked
         navView.setNavigationItemSelectedListener {
-            Log.d("nav", it.itemId.toString())
-            return@setNavigationItemSelectedListener false
+            val id = it.itemId
+            val fragment = getForegroundFragment()
+            Log.d("nav", id.toString())
+
+            val action: NavDirections = if (id == R.id.nav_home) { // home button
+                if (fragment !is HomeFragment) { // if not currently home
+                    BookFragmentDirections.actionBookFragmentToHomeFragment() // go to home
+                }else{
+                    return@setNavigationItemSelectedListener false
+                }
+            } else {
+                when (fragment) { // BookFragments
+                    is HomeFragment -> HomeFragmentDirections.actionHomeFragmentToBookFragment(id)
+                    is BookFragment -> BookFragmentDirections.actionBookFragmentSelf(id)
+                    else -> throw NullPointerException("Unknown fragment (shouldn't be possible)")
+                }
+            }
+            navController.navigate(action)
+            drawerLayout.closeDrawers()
+            return@setNavigationItemSelectedListener true
         }
 
     }
@@ -96,4 +122,10 @@ class MainActivity : AppCompatActivity() {
     private fun createDialog() {
         BookDialogFragment(viewModel.repo).show(supportFragmentManager, "BookDialogFragment")
     }
+
+    fun getForegroundFragment(): Fragment? {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
+        return navHostFragment?.childFragmentManager?.fragments?.get(0)
+    }
+
 }

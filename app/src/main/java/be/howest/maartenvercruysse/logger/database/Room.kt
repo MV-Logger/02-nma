@@ -21,7 +21,7 @@ interface LoggerDao {
 }
 
 
-@Database(entities = [DatabaseBook::class, DatabaseEntry::class  ], version = 3)
+@Database(entities = [DatabaseBook::class, DatabaseEntry::class  ], version = 3, exportSchema = false)
 abstract class LoggerDatabase : RoomDatabase() {
     abstract val loggerDao: LoggerDao
 }

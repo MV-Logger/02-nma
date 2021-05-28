@@ -5,15 +5,19 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import be.howest.maartenvercruysse.logger.database.DatabaseEntry
 
-class BookFragment(id: Int): Fragment() {
+class BookFragment() : Fragment() {
 
     private val viewModel: BookViewModel by lazy {
         val activity = requireNotNull(this.activity) {
             "You can only access the viewModel after onActivityCreated()"
         }
-        ViewModelProvider(this, BookViewModelFactory(activity.application, id))
+
+        val safeArgs: BookFragmentArgs by navArgs()
+
+        ViewModelProvider(this, BookViewModelFactory(activity.application, safeArgs.id))
             .get(BookViewModel::class.java)
     }
 
