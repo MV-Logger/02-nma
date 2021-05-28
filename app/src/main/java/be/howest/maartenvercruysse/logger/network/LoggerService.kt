@@ -17,4 +17,7 @@ interface LoggerService {
 
     @GET("books")
     suspend fun getBooks(): List<Book>
+
+    @POST("books")
+    suspend fun addBook(@Body book: Book): Response<Void>
 }

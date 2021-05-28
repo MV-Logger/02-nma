@@ -9,7 +9,6 @@ import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.R
 import be.howest.maartenvercruysse.logger.StartActivity
 import be.howest.maartenvercruysse.logger.database.DatabaseBook
-import be.howest.maartenvercruysse.logger.database.LoggerDatabase
 import be.howest.maartenvercruysse.logger.database.asDatabaseModel
 import be.howest.maartenvercruysse.logger.database.getDatabase
 import be.howest.maartenvercruysse.logger.network.*
@@ -107,6 +106,19 @@ class LoggerRepository private constructor(context: Context) {
         withContext(Dispatchers.IO) {
             Log.d( "book","refresh books is called");
             database.loggerDao.insertAll(loggerService.getBooks().asDatabaseModel())
+        }
+    }
+
+    suspend fun addBook(book: Book){
+        withContext(Dispatchers.IO){
+           try {
+               loggerService.addBook(book)
+               refreshBooks()
+               Log.d("book", "succeded")
+           }catch (e: Throwable){
+               Log.d("book", "failed")
+               Log.d("book", e.stackTraceToString())
+           }
         }
     }
 }

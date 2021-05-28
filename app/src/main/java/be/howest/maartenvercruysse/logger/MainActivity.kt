@@ -15,8 +15,8 @@ import androidx.navigation.ui.setupWithNavController
 import be.howest.maartenvercruysse.logger.databinding.ActivityMainBinding
 import be.howest.maartenvercruysse.logger.ui.MainViewModel
 import be.howest.maartenvercruysse.logger.ui.MainViewModelFactory
+import be.howest.maartenvercruysse.logger.ui.dialog.BookDialogFragment
 import com.google.android.material.navigation.NavigationView
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,8 +34,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            createDialog()
         }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -72,7 +71,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
@@ -93,5 +91,9 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun createDialog() {
+        BookDialogFragment(viewModel.repo).show(supportFragmentManager, "BookDialogFragment")
     }
 }
