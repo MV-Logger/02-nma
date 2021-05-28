@@ -12,11 +12,7 @@
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_to_bookFragment"
-            app:destination="@id/bookFragment" >
-            <argument
-                android:name="id"
-                android:defaultValue="1" />
-        </action>
+            app:destination="@id/bookFragment" />
     </fragment>
     <fragment
         android:id="@+id/bookFragment"
