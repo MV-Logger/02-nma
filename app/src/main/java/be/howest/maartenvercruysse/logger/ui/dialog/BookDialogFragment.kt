@@ -16,7 +16,7 @@ import be.howest.maartenvercruysse.logger.repository.LoggerRepository
 import kotlinx.coroutines.launch
 
 
-class BookDialogFragment(val repo: LoggerRepository) : DialogFragment() {
+class BookDialogFragment : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
@@ -33,7 +33,7 @@ class BookDialogFragment(val repo: LoggerRepository) : DialogFragment() {
                 .setPositiveButton(R.string.confirm_book) { _, _ ->
                     Log.d("book", "fired")
                     requireActivity().lifecycleScope.launch { // need lifecycle of activity bc this fragment lifecycle ends before request is done
-                        repo.addBook(Book(0, binding.bookName.text.toString()))
+                        LoggerRepository.getInstance(requireContext()).addBook(Book(0, binding.bookName.text.toString()))
                     }
                 }
                 .setNegativeButton(R.string.cancel) { _, _ -> }

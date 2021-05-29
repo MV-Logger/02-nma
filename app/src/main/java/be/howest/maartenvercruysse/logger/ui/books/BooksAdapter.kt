@@ -10,7 +10,7 @@ import be.howest.maartenvercruysse.logger.databinding.BooksViewItemBinding
 /**
  * RecyclerView Adapter for setting up data binding on the items in the list.
  */
-class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
+class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
 
     /**
      * The videos that our Adapter will show
@@ -18,8 +18,6 @@ class BooksAdapter() : RecyclerView.Adapter<BookViewHolder>() {
     var entries: List<DatabaseEntry> = emptyList()
         set(value) {
             field = value
-            // For an extra challenge, update this to use the paging library.
-
             // Notify any registered observers that the data set has changed. This will cause every
             // element in our RecyclerView to be invalidated.
             notifyDataSetChanged()

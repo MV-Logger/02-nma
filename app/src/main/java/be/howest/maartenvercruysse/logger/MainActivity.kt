@@ -19,7 +19,6 @@ import be.howest.maartenvercruysse.logger.ui.MainViewModel
 import be.howest.maartenvercruysse.logger.ui.MainViewModelFactory
 import be.howest.maartenvercruysse.logger.ui.books.BookFragment
 import be.howest.maartenvercruysse.logger.ui.books.BookFragmentDirections
-import be.howest.maartenvercruysse.logger.ui.dialog.BookDialogFragment
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragment
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragmentDirections
 import com.google.android.material.navigation.NavigationView
@@ -40,9 +39,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener {
-            createDialog()
-        }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -121,11 +117,7 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun createDialog() {
-        BookDialogFragment(viewModel.repo).show(supportFragmentManager, "BookDialogFragment")
-    }
-
-    fun getForegroundFragment(): Fragment? {
+    private fun getForegroundFragment(): Fragment? {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         return navHostFragment?.childFragmentManager?.fragments?.get(0)
     }

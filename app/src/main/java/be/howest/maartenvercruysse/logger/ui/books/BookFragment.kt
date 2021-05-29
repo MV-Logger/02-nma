@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,26 +30,31 @@ class BookFragment : Fragment() {
 
     private var viewModelAdapter: BooksAdapter? = null
 
+    private lateinit var binding: BooksViewBinding
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("book", "Book fragment onviewcreated")
         viewModel.entries.observe(viewLifecycleOwner, { entries ->
-            Log.d("book", "entries changed")
             entries?.apply {
                 viewModelAdapter?.entries = entries
             }
+            scrollToEnd(binding.recyclerView)
         })
     }
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-        val binding: BooksViewBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater,
             R.layout.books_view,
             container,
-            false)
+            false
+        )
 
         // Set the lifecycleOwner so DataBinding can observe LiveData
         binding.lifecycleOwner = viewLifecycleOwner
@@ -57,7 +63,8 @@ class BookFragment : Fragment() {
 
         viewModelAdapter = BooksAdapter()
 
-        binding.root.findViewById<RecyclerView>(R.id.recycler_view).apply {
+
+        binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = viewModelAdapter
         }
@@ -65,11 +72,18 @@ class BookFragment : Fragment() {
         return binding.root
     }
 
+    private fun scrollToEnd(recyclerView: RecyclerView) {
+        recyclerView.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-
-
-    init {
-        Log.d("book", "Book fragment init")
+                viewModelAdapter?.itemCount?.takeIf { it > 0 }?.let {
+                    recyclerView.scrollToPosition(it - 1)
+                    Log.d("book", "scrolled $it")
+                }
+            }
+        })
     }
 
 }

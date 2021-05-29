@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import be.howest.maartenvercruysse.logger.databinding.FragmentHomeBinding
+import be.howest.maartenvercruysse.logger.ui.dialog.BookDialogFragment
 
 class HomeFragment : Fragment() {
 
@@ -26,6 +27,9 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
+        binding.fab.setOnClickListener {
+            createDialog()
+        }
 
         return binding.root
     }
@@ -33,5 +37,9 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun createDialog() {
+        BookDialogFragment().show(childFragmentManager , "BookDialogFragment")
     }
 }
