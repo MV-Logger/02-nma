@@ -133,7 +133,9 @@ class LoggerRepository private constructor(context: Context) {
     }
 
     fun getEntriesFromBook(id: Int ): LiveData<List<DatabaseEntry>> {
-        return database.loggerDao.getEntriesFromBook(id)
+        val test = database.loggerDao.getEntriesFromBook(id)
+        Log.d("book", test.value?.size.toString())
+        return test
     }
 }
 

@@ -1,7 +1,6 @@
 package be.howest.maartenvercruysse.logger.network
 
 import android.content.Context
-import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.Response
 
@@ -16,8 +15,6 @@ class AuthInterceptor(context: Context) : Interceptor {
 
         // If token has been saved, add it to the request
         sessionManager.fetchAuthToken()?.let {
-            Log.d("test-auth", it)
-            Log.d("test-auth", "Bearer $it")
             requestBuilder.addHeader("Authorization", "Bearer $it")
         }
 

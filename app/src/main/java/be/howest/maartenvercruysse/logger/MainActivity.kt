@@ -73,13 +73,15 @@ class MainActivity : AppCompatActivity() {
         // This logic, controls which fragment will be opened when an item is clicked
         navView.setNavigationItemSelectedListener {
             val id = it.itemId
+            it.isCheckable = false;
             val fragment = getForegroundFragment()
             Log.d("nav", id.toString())
 
             val action: NavDirections = if (id == R.id.nav_home) { // home button
                 if (fragment !is HomeFragment) { // if not currently home
                     BookFragmentDirections.actionBookFragmentToHomeFragment() // go to home
-                }else{
+                } else {
+                    drawerLayout.closeDrawers()
                     return@setNavigationItemSelectedListener false
                 }
             } else {

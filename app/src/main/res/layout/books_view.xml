@@ -5,6 +5,7 @@
     tools:context=".ui.books.BookFragment">
 
     <data>
+
         <variable
             name="viewModel"
             type="be.howest.maartenvercruysse.logger.ui.books.BookViewModel" />
@@ -12,8 +13,11 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
+        <!--        android:entries="@{viewModel.entries}"-->
+        <!--            app:isNetworkError="@{safeUnbox(viewModel.eventNetworkError)}"-->
+
 
         <ProgressBar
             android:id="@+id/loading_spinner"
@@ -21,17 +25,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
 
-            />
-
-<!--        android:entries="@{viewModel.entries}"-->
-<!--            app:isNetworkError="@{safeUnbox(viewModel.eventNetworkError)}"-->
-
-
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"
+            android:scrollbarStyle="outsideOverlay"
+
             tools:listitem="@layout/books_view_item" />
     </FrameLayout>
 </layout>
