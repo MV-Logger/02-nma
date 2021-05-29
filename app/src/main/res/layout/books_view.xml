@@ -11,33 +11,68 @@
             type="be.howest.maartenvercruysse.logger.ui.books.BookViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!--        android:entries="@{viewModel.entries}"-->
-        <!--            app:isNetworkError="@{safeUnbox(viewModel.eventNetworkError)}"-->
-
-
-        <ProgressBar
-            android:id="@+id/loading_spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-
-            android:visibility="gone" />
+        <Button
+            android:id="@+id/send"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="70dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/send_label"
+            android:textAlignment="inherit"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            app:icon="@drawable/ic_send"
+            app:iconGravity="textTop"
+            app:layout_constraintBottom_toBottomOf="@+id/chat_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/chat_layout"
+            app:layout_constraintTop_toTopOf="@+id/chat_layout"
+            app:layout_constraintVertical_bias="0.49" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
 
             android:clipToPadding="false"
             android:paddingBottom="16dp"
             android:scrollbarStyle="outsideOverlay"
 
+            app:layout_constraintBottom_toTopOf="@id/chat_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/books_view_item" />
-    </FrameLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/chat_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="265dp"
+            android:layout_height="113dp"
+            android:layout_marginStart="16dp"
+
+            android:layout_marginBottom="8dp"
+            android:gravity="bottom"
+            android:hint="@string/chat_label"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler_view">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/chat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:lines="4" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
 

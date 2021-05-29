@@ -32,4 +32,6 @@
     <string name="dialog_book">Add a book</string>
     <string name="fab_content_description">button which adds a book</string>
     <string name="home">Home</string>
+    <string name="chat_label">Add an entry</string>
+    <string name="send_label">send</string>
 </resources>

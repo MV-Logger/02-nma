@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import be.howest.maartenvercruysse.logger.database.DatabaseEntry
 import be.howest.maartenvercruysse.logger.repository.LoggerRepository
 
-class BookViewModel(repo: LoggerRepository, id: Int): ViewModel() {
+class BookViewModel(repo: LoggerRepository, val id: Int): ViewModel() {
 
     val entries: LiveData<List<DatabaseEntry>> = repo.getEntriesFromBook(id)
 }

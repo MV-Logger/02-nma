@@ -98,44 +98,63 @@ class LoggerRepository private constructor(context: Context) {
         }
     }
 
-    fun logout(){
+    fun logout() {
         sessionManager.removeAuthToken()
         appContext.startActivity(Intent(appContext, StartActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
-    suspend fun refreshBooks(){
+    suspend fun refreshBooks() {
         withContext(Dispatchers.IO) {
-            Log.d( "book","refresh books is called");
+            Log.d("book", "refresh books is called");
             database.loggerDao.insertAllBooks(loggerService.getBooks().asDatabaseModel())
         }
     }
 
-    suspend fun refreshEntries(){
-        withContext(Dispatchers.IO){
+    suspend fun refreshEntries() {
+        withContext(Dispatchers.IO) {
             books.value?.forEach {
-                database.loggerDao.insertAllEntries(loggerService.getEntries(it.id).asDatabaseModel())
+                refreshEntry(it.id)
             }
             Log.d("book", "refreshed entries")
         }
     }
 
-    suspend fun addBook(book: Book){
-        withContext(Dispatchers.IO){
-           try {
-               loggerService.addBook(book)
-               refreshBooks()
-               Log.d("book", "succeded")
-           }catch (e: Throwable){
-               Log.d("book", "failed")
-               Log.d("book", e.stackTraceToString())
-           }
+    suspend fun refreshEntry(id: Int) {
+        withContext(Dispatchers.IO) {
+            database.loggerDao.insertAllEntries(loggerService.getEntries(id).asDatabaseModel())
         }
     }
 
-    fun getEntriesFromBook(id: Int ): LiveData<List<DatabaseEntry>> {
+    suspend fun addBook(book: Book) {
+        withContext(Dispatchers.IO) {
+            try {
+                loggerService.addBook(book)
+                refreshBooks()
+                Log.d("book", "succeded")
+            } catch (e: Throwable) {
+                Log.d("book", "failed")
+                Log.d("book", e.stackTraceToString())
+            }
+        }
+    }
+
+    fun getEntriesFromBook(id: Int): LiveData<List<DatabaseEntry>> {
         val test = database.loggerDao.getEntriesFromBook(id)
         Log.d("book", test.value?.size.toString())
         return test
+    }
+
+    suspend fun addEntry(id: Int, entry: Entry) {
+        withContext(Dispatchers.IO) {
+            try {
+                loggerService.addEntry(id, entry)
+                refreshEntry(id)
+                Log.d("book", "succeded")
+            } catch (e: Throwable) {
+                Log.d("book", "failed")
+                Log.d("book", e.stackTraceToString())
+            }
+        }
     }
 }
 

@@ -24,4 +24,7 @@ interface LoggerService {
 
     @GET("books/{id}/entries")
     suspend fun getEntries(@Path("id") id: Int): List<Entry>
+
+    @POST("books/{id}/entries")
+    suspend fun addEntry(@Path("id") id: Int, @Body entry: Entry): Response<Void>
 }

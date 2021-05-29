@@ -7,14 +7,12 @@
         android:id="@+id/book_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginBottom="4dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
         android:hint="@string/add_book"
         android:importantForAutofill="no"
         android:inputType="text"
-        android:paddingStart="5dp"
-        android:maxLength="100"
-        android:paddingEnd="5dp" />
+        android:maxLength="100" />
 </LinearLayout>
