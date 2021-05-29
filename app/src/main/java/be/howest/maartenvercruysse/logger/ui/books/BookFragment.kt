@@ -80,7 +80,6 @@ class BookFragment : Fragment() {
 
                 viewModelAdapter?.itemCount?.takeIf { it > 0 }?.let {
                     recyclerView.scrollToPosition(it - 1)
-                    Log.d("book", "scrolled $it")
                 }
             }
         })

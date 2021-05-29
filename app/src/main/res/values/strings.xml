@@ -31,4 +31,5 @@
     <string name="confirm_book">Add book</string>
     <string name="dialog_book">Add a book</string>
     <string name="fab_content_description">button which adds a book</string>
+    <string name="home">Home</string>
 </resources>

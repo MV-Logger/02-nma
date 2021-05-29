@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -66,13 +65,16 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // This logic, controls which fragment will be opened when an item is clicked
         navView.setNavigationItemSelectedListener {
             val id = it.itemId
-            it.isCheckable = false;
+            val currTitle = it.title.toString()
+
+            it.isCheckable = false // disable focus
+
             val fragment = getForegroundFragment()
             Log.d("nav", id.toString())
 
+            // This logic, controls which fragment will be opened when an item is clicked
             val action: NavDirections = if (id == R.id.nav_home) { // home button
                 if (fragment !is HomeFragment) { // if not currently home
                     BookFragmentDirections.actionBookFragmentToHomeFragment() // go to home
@@ -82,21 +84,20 @@ class MainActivity : AppCompatActivity() {
                 }
             } else {
                 when (fragment) { // BookFragments
-                    is HomeFragment -> HomeFragmentDirections.actionHomeFragmentToBookFragment(id)
-                    is BookFragment -> BookFragmentDirections.actionBookFragmentSelf(id)
+                    is HomeFragment -> HomeFragmentDirections.actionHomeFragmentToBookFragment(id, currTitle)
+                    is BookFragment -> BookFragmentDirections.actionBookFragmentSelf(id, currTitle)
                     else -> throw NullPointerException("Unknown fragment (shouldn't be possible)")
                 }
             }
             navController.navigate(action)
             drawerLayout.closeDrawers()
+
             return@setNavigationItemSelectedListener true
         }
-
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -121,5 +122,4 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         return navHostFragment?.childFragmentManager?.fragments?.get(0)
     }
-
 }

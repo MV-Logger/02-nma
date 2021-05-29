@@ -40,6 +40,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun createDialog() {
-        BookDialogFragment().show(childFragmentManager , "BookDialogFragment")
+        BookDialogFragment().show(childFragmentManager, "BookDialogFragment")
     }
 }
