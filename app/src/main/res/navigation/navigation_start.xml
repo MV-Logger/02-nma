@@ -6,16 +6,6 @@
     app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="be.howest.maartenvercruysse.logger.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" >
-        <action
-            android:id="@+id/action_nav_home_to_loginFragment"
-            app:destination="@id/loginFragment" />
-    </fragment>
-
-    <fragment
         android:id="@+id/loginFragment"
         android:name="be.howest.maartenvercruysse.logger.ui.login.LoginFragment"
         android:label="fragment_login"
@@ -23,9 +13,6 @@
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
-        <action
-            android:id="@+id/action_loginFragment_to_nav_home"
-            app:destination="@id/nav_home" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -35,8 +22,5 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_registerFragment_to_nav_home"
-            app:destination="@id/nav_home" />
     </fragment>
 </navigation>

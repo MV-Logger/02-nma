@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -24,7 +25,9 @@ import be.howest.maartenvercruysse.logger.ui.books.BookFragment
 import be.howest.maartenvercruysse.logger.ui.books.BookFragmentDirections
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragment
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragmentDirections
+
 import com.google.android.material.navigation.NavigationView
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -48,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home
+                R.id.homeFragment, R.id.bookFragment
             ), drawerLayout
         )
         initDrawerButton(drawerLayout, binding.appBarMain.toolbar)
@@ -69,11 +72,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
-
-//        binding.appBarMain.toolbar.setNavigationOnClickListener {
-//           navController.navigateUp(appBarConfiguration)
-//        }
-
 
         navView.setNavigationItemSelectedListener {
             val id = it.itemId
@@ -132,6 +130,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d("book", "option selected " + item.title)
+        if (item.itemId == R.id.action_logout) {
+            viewModel.repo.logout()
+        }
+        return true
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -146,7 +152,7 @@ class MainActivity : AppCompatActivity() {
         drawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {}
         // Set the drawer toggle as the DrawerListener
         drawerLayout.addDrawerListener(drawerToggle)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
+
     }
 
 
