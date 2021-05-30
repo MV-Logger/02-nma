@@ -19,6 +19,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
 import be.howest.maartenvercruysse.logger.databinding.ActivityMainBinding
 import be.howest.maartenvercruysse.logger.ui.MainViewModel
 import be.howest.maartenvercruysse.logger.ui.MainViewModelFactory
@@ -26,8 +27,13 @@ import be.howest.maartenvercruysse.logger.ui.books.BookFragment
 import be.howest.maartenvercruysse.logger.ui.books.BookFragmentDirections
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragment
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragmentDirections
+import be.howest.maartenvercruysse.logger.work.RefreshDataWorker
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
     private lateinit var drawerToggle: ActionBarDrawerToggle
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,7 +114,7 @@ class MainActivity : AppCompatActivity() {
             return@setNavigationItemSelectedListener true
         }
         navView.getHeaderView(0).findViewById<TextView>(R.id.title_nav).text = viewModel.repo.getUsername()
-
+        delayedInit()
     }
 
 
@@ -161,5 +168,25 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    private fun setupRecurringWork() {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .setRequiresBatteryNotLow(true)
+            .build()
 
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(1, TimeUnit.DAYS)
+            .setConstraints(constraints)
+            .build()
+
+        WorkManager.getInstance().enqueueUniquePeriodicWork(
+            RefreshDataWorker.WORK_NAME,
+            ExistingPeriodicWorkPolicy.KEEP,
+            repeatingRequest)
+    }
+
+    private fun delayedInit() {
+        applicationScope.launch {
+            setupRecurringWork()
+        }
+    }
 }

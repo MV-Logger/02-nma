@@ -75,4 +75,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
+    // WorkManager dependency
+    implementation "android.arch.work:work-runtime-ktx:1.0.1"
+
 }
