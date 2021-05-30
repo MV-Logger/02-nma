@@ -5,7 +5,6 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import be.howest.maartenvercruysse.logger.MainActivity
 import be.howest.maartenvercruysse.logger.R
 import be.howest.maartenvercruysse.logger.StartActivity
 import be.howest.maartenvercruysse.logger.database.DatabaseBook
@@ -27,13 +26,13 @@ class LoggerRepository private constructor(context: Context) {
 
     val books: LiveData<List<DatabaseBook>> = database.loggerDao.getBooks()
 
-    suspend fun checkAuth() {
+    suspend fun checkAuth(loginResult: MutableLiveData<LoginResult>) {
         if (sessionManager.fetchAuthToken() != null) {
             withContext(Dispatchers.IO) {
                 try {
                     val response = loggerService.authenticated()
                     if (response.isSuccessful) {
-                        appContext.startActivity(Intent(appContext, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = sessionManager.fetchUsername())))
                     }
                     Unit
                 } catch (e: Throwable) {
@@ -68,7 +67,7 @@ class LoggerRepository private constructor(context: Context) {
 
                 if (response.isSuccessful) {
                     val token: Token = response.body()!!
-                    sessionManager.saveAuthToken(token.access_token)
+                    sessionManager.saveAuthToken(token.access_token, user.username)
                     loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = user.username)))
                 } else {
                     loginResult.postValue(LoginResult(error = R.string.login_failed))

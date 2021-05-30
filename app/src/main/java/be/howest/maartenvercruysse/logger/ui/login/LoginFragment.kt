@@ -68,6 +68,8 @@ class LoginFragment : Fragment() {
                 }
             })
 
+
+        var flag = false
         loginViewModel.loginResult.observe(viewLifecycleOwner,
             Observer { loginResult ->
                 loginResult ?: return@Observer
@@ -76,9 +78,12 @@ class LoginFragment : Fragment() {
                     showLoginFailed(it)
                 }
                 loginResult.success?.let {
+                   if (flag) return@Observer else flag = true
                     updateUiWithUser(it)
+
                     val intent = Intent(this.context, MainActivity::class.java)
                     startActivity(intent)
+                    requireActivity().finish()
                 }
             })
 
@@ -123,7 +128,7 @@ class LoginFragment : Fragment() {
             {flag ->
                 if (flag == false){
                     lifecycleScope.launch{
-                        loginViewModel.repo.checkAuth()
+                        loginViewModel.checkAuth()
                     }
                 }
             })

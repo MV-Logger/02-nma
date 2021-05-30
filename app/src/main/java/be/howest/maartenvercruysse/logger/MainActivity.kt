@@ -1,10 +1,13 @@
 package be.howest.maartenvercruysse.logger
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private lateinit var drawerToggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,13 +45,14 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
+
         appBarConfiguration = AppBarConfiguration(
             setOf(
                 R.id.nav_home
             ), drawerLayout
         )
+        initDrawerButton(drawerLayout, binding.appBarMain.toolbar)
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
@@ -64,6 +69,11 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+//        binding.appBarMain.toolbar.setNavigationOnClickListener {
+//           navController.navigateUp(appBarConfiguration)
+//        }
+
 
         navView.setNavigationItemSelectedListener {
             val id = it.itemId
@@ -102,14 +112,23 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        Log.d("book", "post syncstate")
+        super.onPostCreate(savedInstanceState)
+        drawerToggle.syncState()
+    }
 
-        return when (item.itemId) {
-            R.id.action_logout -> {
-                viewModel.repo.logout()
-                true
-            }
-            else -> false
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drawerToggle.onConfigurationChanged(newConfig)
+    }
+
+    override fun onBackPressed() {
+        Log.d("book", "back pressed")
+        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
 
@@ -122,4 +141,13 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main)
         return navHostFragment?.childFragmentManager?.fragments?.get(0)
     }
+
+    private fun initDrawerButton(drawerLayout: DrawerLayout, toolbar: Toolbar) {
+        drawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {}
+        // Set the drawer toggle as the DrawerListener
+        drawerLayout.addDrawerListener(drawerToggle)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+    }
+
+
 }

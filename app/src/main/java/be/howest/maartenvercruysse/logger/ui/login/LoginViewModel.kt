@@ -42,4 +42,8 @@ class LoginViewModel(val repo: LoggerRepository) : ViewModel() {
     private fun isPasswordValid(password: String): Boolean {
         return password.isNotEmpty()
     }
+
+    suspend fun checkAuth() {
+        repo.checkAuth(_loginResult)
+    }
 }
