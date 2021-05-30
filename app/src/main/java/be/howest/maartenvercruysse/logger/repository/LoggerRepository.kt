@@ -155,6 +155,10 @@ class LoggerRepository private constructor(context: Context) {
             }
         }
     }
+
+    fun getUsername(): String {
+        return sessionManager.fetchUsername()
+    }
 }
 
 

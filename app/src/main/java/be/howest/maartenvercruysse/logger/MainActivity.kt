@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -25,7 +26,6 @@ import be.howest.maartenvercruysse.logger.ui.books.BookFragment
 import be.howest.maartenvercruysse.logger.ui.books.BookFragmentDirections
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragment
 import be.howest.maartenvercruysse.logger.ui.home.HomeFragmentDirections
-
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -43,6 +43,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        viewModel = ViewModelProvider(this, MainViewModelFactory(this.application))
+            .get(MainViewModel::class.java)
+
+
         setSupportActionBar(binding.appBarMain.toolbar)
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -54,13 +58,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment, R.id.bookFragment
             ), drawerLayout
         )
+
         initDrawerButton(drawerLayout, binding.appBarMain.toolbar)
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        viewModel = ViewModelProvider(this, MainViewModelFactory(this.application))
-            .get(MainViewModel::class.java)
+
 
         val menu = navView.menu.addSubMenu("Books")
 
@@ -102,6 +106,8 @@ class MainActivity : AppCompatActivity() {
 
             return@setNavigationItemSelectedListener true
         }
+        navView.getHeaderView(0).findViewById<TextView>(R.id.title_nav).text = viewModel.repo.getUsername()
+
     }
 
 
