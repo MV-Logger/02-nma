@@ -37,4 +37,6 @@
 
     <string name="drawer_open">open navigation</string>
     <string name="drawer_close">close navigation</string>
+    <string name="action_webview">Web view</string>
+    <string name="browser_not_found">No browser found!</string>
 </resources>

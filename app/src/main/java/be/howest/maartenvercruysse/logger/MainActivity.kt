@@ -1,11 +1,15 @@
 package be.howest.maartenvercruysse.logger
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -70,7 +74,6 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
 
 
         val menu = navView.menu.addSubMenu("Books")
@@ -145,9 +148,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         Log.d("book", "option selected " + item.title)
-        if (item.itemId == R.id.action_logout) {
-            viewModel.repo.logout()
+
+        when (item.itemId) {
+            R.id.action_logout -> viewModel.repo.logout()
+            R.id.action_webview -> openWebView()
         }
+
         return true
     }
 
@@ -181,12 +187,29 @@ class MainActivity : AppCompatActivity() {
         WorkManager.getInstance().enqueueUniquePeriodicWork(
             RefreshDataWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.KEEP,
-            repeatingRequest)
+            repeatingRequest
+        )
     }
 
     private fun delayedInit() {
         applicationScope.launch {
             setupRecurringWork()
         }
+    }
+
+    private fun openWebView() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://logs-e7c66.web.app"))
+
+        Log.d("book", "webview")
+
+        try {
+            startActivity(intent)
+        } catch (ex: ActivityNotFoundException) {
+            showToast(R.string.browser_not_found)
+        }
+    }
+
+    private fun showToast(resource: Int) {
+        Toast.makeText(this, resources.getString(resource), Toast.LENGTH_LONG).show()
     }
 }
