@@ -26,7 +26,7 @@ class LoggerRepository private constructor(context: Context) {
     private var sessionManager: SessionManager = SessionManager(context)
     private val database = getDatabase(context)
 
-    val books: LiveData<List<DatabaseBook>> = database.loggerDao.getBooks()
+    var books: LiveData<List<DatabaseBook>> = database.loggerDao.getBooks()
 
     suspend fun checkAuth(loginResult: MutableLiveData<LoginResult>, loadingProgressBar: ProgressBar) {
         if (sessionManager.fetchAuthToken() != null) {
@@ -116,21 +116,22 @@ class LoggerRepository private constructor(context: Context) {
         }
     }
 
-    suspend fun refreshBooks() {
+    private suspend fun refreshBooks() {
         withContext(Dispatchers.IO) {
             database.loggerDao.insertAllBooks(loggerService.getBooks().asDatabaseModel())
         }
     }
 
-    suspend fun refreshEntries() {
+    private suspend fun refreshEntries() {
         withContext(Dispatchers.IO) {
-            books.value?.forEach {
+            Log.d("book", "books: " + books.value?.size)
+            loggerService.getBooks().forEach {
                 refreshEntry(it.id)
             }
         }
     }
 
-    suspend fun refreshEntry(id: Int) {
+    private suspend fun refreshEntry(id: Int) {
         withContext(Dispatchers.IO) {
             database.loggerDao.insertAllEntries(loggerService.getEntries(id).asDatabaseModel())
         }
@@ -148,9 +149,7 @@ class LoggerRepository private constructor(context: Context) {
     }
 
     fun getEntriesFromBook(id: Int): LiveData<List<DatabaseEntry>> {
-        val test = database.loggerDao.getEntriesFromBook(id)
-        Log.d("book", test.value?.size.toString())
-        return test
+        return database.loggerDao.getEntriesFromBook(id)
     }
 
     suspend fun addEntry(id: Int, entry: Entry) {

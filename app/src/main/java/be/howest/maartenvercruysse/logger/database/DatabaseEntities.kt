@@ -9,14 +9,14 @@ import be.howest.maartenvercruysse.logger.network.Entry
 
 @Entity
 data class DatabaseBook(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val name: String
 )
 
 @Entity
 data class DatabaseEntry(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val text: String,
     @ColumnInfo(name = "when")
