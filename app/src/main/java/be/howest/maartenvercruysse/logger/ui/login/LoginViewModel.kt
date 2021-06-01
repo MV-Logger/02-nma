@@ -1,5 +1,6 @@
 package be.howest.maartenvercruysse.logger.ui.login
 
+import android.widget.ProgressBar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +26,7 @@ class LoginViewModel(val repo: LoggerRepository) : ViewModel() {
 
     fun loginDataChanged(username: String, password: String) {
         if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
+            _loginForm.value = LoginFormState(usernameError = R.string.no_username)
         } else if (!isPasswordValid(password)) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password_login)
         } else {
@@ -43,7 +44,7 @@ class LoginViewModel(val repo: LoggerRepository) : ViewModel() {
         return password.isNotEmpty()
     }
 
-    suspend fun checkAuth() {
-        repo.checkAuth(_loginResult)
+    suspend fun checkAuth(loadingProgressBar: ProgressBar) {
+        repo.checkAuth(_loginResult, loadingProgressBar)
     }
 }

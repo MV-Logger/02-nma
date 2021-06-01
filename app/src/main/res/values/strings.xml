@@ -39,4 +39,7 @@
     <string name="drawer_close">close navigation</string>
     <string name="action_webview">Web view</string>
     <string name="browser_not_found">No browser found!</string>
+    <string name="no_internet">No connection with the server</string>
+    <string name="no_username">Username can\'t be blank</string>
+    <string name="logo">logo</string>
 </resources>

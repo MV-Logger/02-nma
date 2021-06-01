@@ -12,8 +12,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters) : Corouti
         val repository = LoggerRepository.getInstance(applicationContext)
 
         try {
-            repository.refreshEntries()
-            repository.refreshBooks()
+            repository.refreshAll()
         } catch (e: HttpException) {
             return Result.retry()
         }

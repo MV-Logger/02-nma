@@ -15,7 +15,7 @@ class ApiClient {
         // Initialize LoggerService if not initialized yet
         if (!::loggerService.isInitialized) {
             val retrofit = Retrofit.Builder()
-                .baseUrl(Constants.LARAVEL_API_SERVER)
+                .baseUrl(Constants.NODE_API_SERVER) // Laravel server takes a lot longer to startup
                 .addConverterFactory(MoshiConverterFactory.create())
                 .client(okhttpClient(context))
                 .build()
@@ -31,7 +31,7 @@ class ApiClient {
      */
     private fun okhttpClient(context: Context): OkHttpClient {
         return OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)  // increase timeout from 10s (default) to 60s
+            .connectTimeout(60, TimeUnit.SECONDS)  // increase timeout from 10s (default) to 60s bc laravel server can take up to a minute
             .readTimeout(60, TimeUnit.SECONDS)
             .writeTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(AuthInterceptor(context))

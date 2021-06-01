@@ -3,6 +3,8 @@ package be.howest.maartenvercruysse.logger.repository
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import be.howest.maartenvercruysse.logger.R
@@ -26,17 +28,21 @@ class LoggerRepository private constructor(context: Context) {
 
     val books: LiveData<List<DatabaseBook>> = database.loggerDao.getBooks()
 
-    suspend fun checkAuth(loginResult: MutableLiveData<LoginResult>) {
+    suspend fun checkAuth(loginResult: MutableLiveData<LoginResult>, loadingProgressBar: ProgressBar) {
         if (sessionManager.fetchAuthToken() != null) {
             withContext(Dispatchers.IO) {
                 try {
+                    loadingProgressBar.visibility = View.GONE
                     val response = loggerService.authenticated()
                     if (response.isSuccessful) {
                         loginResult.postValue(LoginResult(success = LoggedInUserView(displayName = sessionManager.fetchUsername())))
+                    } else {
+                        loginResult.postValue(LoginResult(error = R.string.login_failed))
                     }
                     Unit
                 } catch (e: Throwable) {
                     Log.d("test-auth", e.stackTraceToString())
+                    loginResult.postValue(LoginResult(error = R.string.no_internet))
                 }
             }
         }
@@ -100,6 +106,14 @@ class LoggerRepository private constructor(context: Context) {
     fun logout() {
         sessionManager.removeAuthToken()
         appContext.startActivity(Intent(appContext, StartActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+    }
+
+    suspend fun refreshAll() {
+        withContext(Dispatchers.IO) {
+            database.clearAllTables()
+            refreshBooks()
+            refreshEntries()
+        }
     }
 
     suspend fun refreshBooks() {

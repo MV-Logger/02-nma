@@ -144,7 +144,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_logout -> viewModel.repo.logout()
+            R.id.action_logout -> {
+                viewModel.repo.logout()
+                this.finish()
+            }
             R.id.action_webview -> openWebView()
         }
 

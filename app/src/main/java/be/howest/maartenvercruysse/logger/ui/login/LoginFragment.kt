@@ -129,8 +129,7 @@ class LoginFragment : Fragment() {
             {flag ->
                 if (flag == false){
                     lifecycleScope.launch{
-                        loadingProgressBar.visibility = View.VISIBLE
-                        loginViewModel.checkAuth()
+                        loginViewModel.checkAuth(loadingProgressBar)
                     }
                 }
             })
