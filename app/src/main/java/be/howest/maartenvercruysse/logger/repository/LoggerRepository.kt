@@ -124,7 +124,6 @@ class LoggerRepository private constructor(context: Context) {
 
     private suspend fun refreshEntries() {
         withContext(Dispatchers.IO) {
-            Log.d("book", "books: " + books.value?.size)
             loggerService.getBooks().forEach {
                 refreshEntry(it.id)
             }
