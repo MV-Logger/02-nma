@@ -10,7 +10,7 @@ import be.howest.maartenvercruysse.logger.databinding.BooksViewItemBinding
 /**
  * RecyclerView Adapter for setting up data binding on the items in the list.
  */
-class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
+class BooksAdapter(val callback: BookCallback) : RecyclerView.Adapter<BookViewHolder>() {
 
     /**
      * The videos that our Adapter will show
@@ -47,8 +47,7 @@ class BooksAdapter : RecyclerView.Adapter<BookViewHolder>() {
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         holder.viewDataBinding.also {
             it.entry = entries[position]
+            it.callback = callback
         }
     }
-
 }
-

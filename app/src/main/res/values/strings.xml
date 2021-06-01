@@ -24,7 +24,7 @@
     <string name="login_failed">Login failed</string>
     <string name="back">Go back to login page</string>
     <string name="toRegister">If you don\'t have an account yet, sign up here</string>
-    <string name="home_str">Create a book</string>
+    <string name="home_str">Select or create a book</string>
 
     <string name="add_book">Name of book…</string>
     <string name="cancel">cancel</string>

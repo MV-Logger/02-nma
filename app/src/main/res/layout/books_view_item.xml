@@ -9,9 +9,9 @@
             name="entry"
             type="be.howest.maartenvercruysse.logger.database.DatabaseEntry" />
 
-<!--        <variable-->
-<!--            name="videoCallback"-->
-<!--            type="com.example.android.devbyteviewer.ui.VideoClick" />-->
+        <variable
+            name="callback"
+            type="be.howest.maartenvercruysse.logger.ui.books.BookCallback" />
     </data>
 
 
@@ -20,6 +20,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:onLongClick="@{() -> callback.onClick(entry)}"
             android:id="@+id/entry_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

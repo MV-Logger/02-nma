@@ -1,6 +1,7 @@
 package be.howest.maartenvercruysse.logger.ui.books
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -68,7 +69,13 @@ class BookFragment : Fragment() {
 
         binding.viewModel = viewModel
 
-        viewModelAdapter = BooksAdapter()
+        viewModelAdapter = BooksAdapter(BookCallback{
+            Log.d("book", "long pressed")
+            val intent: Intent = Intent().setAction(Intent.ACTION_SEND)
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_TEXT, it.text)
+            startActivity(Intent.createChooser(intent, "Share via"))
+        })
 
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
