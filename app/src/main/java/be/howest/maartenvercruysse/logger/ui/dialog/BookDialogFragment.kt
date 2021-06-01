@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.lifecycleScope
 import be.howest.maartenvercruysse.logger.R
@@ -31,7 +30,6 @@ class BookDialogFragment : DialogFragment() {
             builder.setView(view)
                 .setTitle(R.string.dialog_book)
                 .setPositiveButton(R.string.confirm_book) { _, _ ->
-                    Log.d("book", "fired")
                     requireActivity().lifecycleScope.launch { // need lifecycle of activity bc this fragment lifecycle ends before request is done
                         LoggerRepository.getInstance(requireContext()).addBook(Book(0, binding.bookName.text.toString()))
                     }

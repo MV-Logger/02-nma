@@ -3,7 +3,6 @@ package be.howest.maartenvercruysse.logger.ui.books
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class BookFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("book", "Book fragment onviewcreated")
+
         viewModel.entries.observe(viewLifecycleOwner, { entries ->
             entries?.apply {
                 viewModelAdapter?.entries = entries
@@ -70,7 +69,6 @@ class BookFragment : Fragment() {
         binding.viewModel = viewModel
 
         viewModelAdapter = BooksAdapter(BookCallback{
-            Log.d("book", "long pressed")
             val intent: Intent = Intent().setAction(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_TEXT, it.text)

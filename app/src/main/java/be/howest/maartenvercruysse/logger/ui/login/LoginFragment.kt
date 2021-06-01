@@ -107,6 +107,7 @@ class LoginFragment : Fragment() {
         passwordEditText.addTextChangedListener(afterTextChangedListener)
         passwordEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                loadingProgressBar.visibility = View.VISIBLE
                 loginViewModel.login(
                     usernameEditText.text.toString(),
                     passwordEditText.text.toString()
@@ -128,6 +129,7 @@ class LoginFragment : Fragment() {
             {flag ->
                 if (flag == false){
                     lifecycleScope.launch{
+                        loadingProgressBar.visibility = View.VISIBLE
                         loginViewModel.checkAuth()
                     }
                 }

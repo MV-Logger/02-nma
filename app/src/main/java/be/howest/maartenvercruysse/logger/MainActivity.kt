@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
@@ -94,7 +93,6 @@ class MainActivity : AppCompatActivity() {
             it.isCheckable = false // disable focus
 
             val fragment = getForegroundFragment()
-            Log.d("nav", id.toString())
 
             // This logic, controls which fragment will be opened when an item is clicked
             val action: NavDirections = if (id == R.id.nav_home) { // home button
@@ -127,7 +125,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
-        Log.d("book", "post syncstate")
         super.onPostCreate(savedInstanceState)
         drawerToggle.syncState()
     }
@@ -138,7 +135,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        Log.d("book", "back pressed")
         if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
@@ -147,8 +143,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d("book", "option selected " + item.title)
-
         when (item.itemId) {
             R.id.action_logout -> viewModel.repo.logout()
             R.id.action_webview -> openWebView()
@@ -199,8 +193,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun openWebView() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://logs-e7c66.web.app"))
-
-        Log.d("book", "webview")
 
         try {
             startActivity(intent)

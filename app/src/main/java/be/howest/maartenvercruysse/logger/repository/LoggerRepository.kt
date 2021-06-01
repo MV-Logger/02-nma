@@ -104,7 +104,6 @@ class LoggerRepository private constructor(context: Context) {
 
     suspend fun refreshBooks() {
         withContext(Dispatchers.IO) {
-            Log.d("book", "refresh books is called");
             database.loggerDao.insertAllBooks(loggerService.getBooks().asDatabaseModel())
         }
     }
@@ -114,7 +113,6 @@ class LoggerRepository private constructor(context: Context) {
             books.value?.forEach {
                 refreshEntry(it.id)
             }
-            Log.d("book", "refreshed entries")
         }
     }
 
@@ -129,9 +127,7 @@ class LoggerRepository private constructor(context: Context) {
             try {
                 loggerService.addBook(book)
                 refreshBooks()
-                Log.d("book", "succeded")
             } catch (e: Throwable) {
-                Log.d("book", "failed")
                 Log.d("book", e.stackTraceToString())
             }
         }
@@ -148,9 +144,7 @@ class LoggerRepository private constructor(context: Context) {
             try {
                 loggerService.addEntry(id, entry)
                 refreshEntry(id)
-                Log.d("book", "succeded")
             } catch (e: Throwable) {
-                Log.d("book", "failed")
                 Log.d("book", e.stackTraceToString())
             }
         }
